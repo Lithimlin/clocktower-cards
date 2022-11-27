@@ -1,0 +1,43 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{graphics}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{game-cards}
+
+\definecolor{goodcolor}{RGB}{29,130,255}
+\definecolor{evilcolor}{RGB}{255,29,29}
+\definecolor{storytellercolor}{RGB}{243,203,12}
+
+\pgfmathsetmacro{\logowidth}{0.7*\texturewidth}
+\pgfmathsetmacro{\logoheight}{0.7*\textureheight}
+
+\tikzset{
+    %   Image for the default background
+    cardbackside/.style={
+        path picture={
+                \node at (0.5*\cardwidth,0.5*\cardheight) {
+                    \includegraphics[width=\texturewidth cm, height=\textureheight cm]{img/texture-back}
+            };
+        }
+    },
+}
+
+\newcommand{\backside}{
+    \begin{tikzpicture}
+        \cardborder
+        \fill[cardcorners, cardbackside] \shapeCardInside;
+        \node at (0.5*\cardwidth,0.5*\cardheight) {
+                    \includegraphics[width=\logowidth cm, height=\logoheight cm,keepaspectratio]{img/back_logo}
+        };
+    \end{tikzpicture}
+}
+
+\begin{document}
+\pagestyle{empty}
+\centering
+\include{cardsGen}
+\include{cardBacksGen}
+
+\end{document}
