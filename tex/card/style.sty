@@ -1,0 +1,209 @@
+%   macros, units in cm
+\pgfmathsetmacro{\cardwidth}{5.9}
+\pgfmathsetmacro{\cardheight}{9.1}
+\pgfmathsetmacro{\cardpadding}{0.2}
+
+\pgfmathsetmacro{\cardinsidewidth}{\cardwidth-\cardpadding}
+\pgfmathsetmacro{\cardinsideheight}{\cardheight-\cardpadding}
+
+\pgfmathsetmacro{\textpadding}{0.3}
+\pgfmathsetmacro{\cardtextwidth}{\cardinsidewidth-2*\textpadding}
+\pgfmathsetmacro{\cardtextheight}{\cardinsideheight-2*\textpadding}
+
+\pgfmathsetmacro{\titlewidth}{\cardwidth}
+\pgfmathsetmacro{\titletextwidth}{\titlewidth-\textpadding}
+\pgfmathsetmacro{\titleheight}{1}
+\pgfmathsetmacro{\titleborder}{0.1}
+\pgfmathsetmacro{\titlepadding}{0.2}
+\pgfmathsetmacro{\titley}{\cardheight-\cardpadding-\titlepadding-0.5*\titleheight}
+
+\pgfmathsetmacro{\midbannerheight}{0.7}
+\pgfmathsetmacro{\botbannerheight}{0.3}
+
+\pgfmathsetmacro{\textboxpadding}{0.1}
+\pgfmathsetmacro{\textboxheight}{(\cardinsideheight-\midbannerheight)/2-\botbannerheight-2*\textboxpadding}
+\pgfmathsetmacro{\textboxwidth}{\cardinsidewidth-4*\textboxpadding}
+
+\pgfmathsetmacro{\imageboxheight}{\cardheight-\cardpadding-\titlepadding-\titleheight-0.5*\cardheight-0.5*\midbannerheight}
+\pgfmathsetmacro{\imageheight}{\imageboxheight/2}
+\pgfmathsetmacro{\imagey}{\cardheight-\cardpadding-\titlepadding-\titleheight-0.5*\imageboxheight}
+
+\pgfmathsetmacro{\tokenradius}{0.6}
+\pgfmathsetmacro{\tokendiameter}{2*\tokenradius}
+\pgfmathsetmacro{\tokenborder}{0.025}
+\pgfmathsetmacro{\tokenimageradius}{1.7*\tokenradius}
+
+\pgfmathsetmacro{\texturewidth}{\cardinsidewidth}
+\pgfmathsetmacro{\textureheight}{\cardinsideheight}
+
+
+%   shapes of the individual card elements
+\def\shapeCard{(0,0) rectangle (\cardwidth,\cardheight)}
+\def\shapeCardInside{(\cardpadding,\cardpadding) rectangle (\cardinsidewidth,\cardinsideheight)}
+\def\shapeTitleBanner{(0,\cardheight-\cardpadding-\titlepadding) rectangle (\titlewidth,\cardheight-\cardpadding-\titlepadding-\titleheight)}
+\def\shapeTitleBannerTopBorder{(0,\cardheight-\cardpadding-\titlepadding) -- (\titlewidth,\cardheight-\cardpadding-\titlepadding)}
+\def\shapeTitleBannerBotBorder{(0,\cardheight-\cardpadding-\titlepadding-\titleheight) -- (\titlewidth,\cardheight-\cardpadding-\titlepadding-\titleheight)}
+\def\shapeMidBanner{(\cardpadding,\cardheight*0.5+\midbannerheight*0.5) rectangle (\cardinsidewidth,\cardheight*0.5-\midbannerheight*0.5)}
+\def\shapeMidBannerTopBorder{(\cardpadding,\cardheight*0.5+\midbannerheight*0.5) -- (\cardinsidewidth,\cardheight*0.5+\midbannerheight*0.5)}
+\def\shapeMidBannerBotBorder{(\cardpadding,\cardheight*0.5-\midbannerheight*0.5) -- (\cardinsidewidth,\cardheight*0.5-\midbannerheight*0.5)}
+\def\shapeImage{(0.5*\cardwidth,\imagey) circle [radius=\imageheight]}
+\def\shapeBotBanner{(\cardpadding,\cardpadding) rectangle (\cardinsidewidth,\cardpadding+\botbannerheight)}
+\def\shapeTextArea{(\cardpadding+\textboxpadding,\cardpadding+\botbannerheight+\textboxpadding)
+    rectangle (\cardwidth-\cardpadding-\textboxpadding,0.5*\cardheight-0.5*\midbannerheight-\textboxpadding)}
+\def\shapeToken{(\cardwidth-\cardpadding-\tokenradius-\tokenborder,\cardpadding+\tokenradius+\tokenborder) circle [radius=\tokenradius]}
+
+
+%   element styles
+\tikzset{
+    %   rounded corners for cards
+    cardcorners/.style={
+        rounded corners=0.2cm
+    },
+    %   rounded corners for banners
+    elementcorners/.style={
+        rounded corners=0.1cm
+    },
+    %   drop shadow for banners
+    bannershadow/.style={
+        drop shadow={
+            opacity=.5,
+            shadow,
+            color=black
+        }
+    },
+    %   banner style
+    banner/.style={
+        elementcorners,
+        bannershadow
+    },
+    %   card background image
+    cardimage/.style={
+        align=center,
+        path picture={
+            \node at (0.5*\cardwidth,\imagey) {
+                \includegraphics[height=\imageheight cm]{#1}
+            };
+        }
+    },
+    %   token image
+    cardtoken/.style={
+        align=center,
+        path picture={
+            \node at (\cardwidth-\cardpadding-\tokenradius,\cardpadding+\tokenradius) {
+                \includegraphics[height=\tokenimageradius cm]{#1}
+            };
+        }
+    },
+    %   token background image
+    cardtokenbg/.style={
+        align=center,
+        path picture={
+            \node at (\cardwidth-\cardpadding-\tokenradius,\cardpadding+\tokenradius) {
+                \includegraphics[height=\tokendiameter cm]{card/img/texture-token}
+            };
+        }
+    },
+    %   Image for the default background
+    cardbackground/.style={
+        path picture={
+                \node at (0.5*\cardwidth,0.5*\cardheight) {
+                    \includegraphics[width=\texturewidth cm, height=\textureheight cm]{card/img/texture-card}
+            };
+        }
+    },
+    titlebackground/.style={
+        path picture={
+                \node at (0.5*\cardwidth,\titley) {
+                    \includegraphics[width=\cardwidth cm, height=\titleheight cm]{card/img/texture-title}
+            };
+        }
+    },
+    midbannerbackground/.style={
+        path picture={
+                \node at (0.5*\cardwidth,0.5*\cardheight) {
+                    \includegraphics[width=\cardinsidewidth cm, height=\midbannerheight cm]{card/img/texture-card}
+            };
+        }
+    },
+}
+
+\tikzfading[name=fade out,
+    inner color=transparent!0, outer color=transparent!100]
+\tikzfading[name=textbox fade,
+    inner color=transparent!0, outer color=transparent!80]
+\tikzfading[name=color85,
+    left color=transparent!85, right color=transparent!85]
+\tikzfading[name=title fade,
+    inner color=transparent!40, outer color=transparent!0]
+
+
+%   card elements
+%%%
+%   TikZ grid
+\newcommand{\carddebug}{
+    \draw [step=1,help lines] (0,0) grid (\cardwidth,\cardheight);
+}
+
+%   card border
+\newcommand{\cardborder}{
+    \draw[lightgray,fill=card_border,cardcorners] \shapeCard;
+    \fill[cardbackground,cardcorners] \shapeCardInside;
+}
+
+\newcommand{\cardtitle}[1]{
+    \fill[titlebackground, path fading=title fade] \shapeTitleBanner;
+    % top and bottom borders
+    \draw[card_bannertopborder, line width=1] \shapeTitleBannerTopBorder;
+    \draw[card_bannerbotborder, line width=1] \shapeTitleBannerBotBorder;
+    % text
+    \node[card_titletext, text width=\titletextwidth cm, align=center] at (0.5*\cardwidth,\titley) {\Large\usefont{OT1}{rtnd}{bx}{n} #1};
+}
+
+\newcommand{\cardmidbanner}[1]{
+    \begin{scope}[even odd rule]
+        % clip anything outside the card inside
+        \clip[cardcorners] \shapeCardInside;
+        % banner box
+        \fill[darkgray, path fading=color85] \shapeMidBanner;
+        % top and bottom borders
+        \draw[card_bannertopborder, line width=1] \shapeMidBannerTopBorder;
+        \draw[card_bannerbotborder, line width=1] \shapeMidBannerBotBorder;
+        % text
+        \node[text width=\cardtextwidth cm, align=left] at (0.5*\cardwidth,0.5*\cardheight) {\normalsize\usefont{OT1}{rtnd}{bx}{n} #1};
+    \end{scope}
+}
+
+\newcommand{\cardbotbanner}[2]{
+    \begin{scope}[even odd rule]
+        % clip anything outside the card inside
+        \clip[cardcorners] \shapeCardInside;
+        % banner box
+        \fill[black] \shapeBotBanner;
+        % text
+        \node[white, text width=\cardtextwidth*0.25 cm, align=left, anchor=west] at (\cardpadding,\cardpadding+0.5*\botbannerheight) {\tiny #1};
+        \node[white, text width=\cardtextwidth*0.50 cm, align=center] at (0.5*\cardwidth,\cardpadding+0.5*\botbannerheight) {\tiny #2};
+    \end{scope}
+}
+
+%   icon
+\newcommand{\cardimage}[1]{
+    \fill[white, path fading=fade out] \shapeImage;
+    \draw[white, cardcorners, cardimage=#1] \shapeCardInside;
+}
+
+%   content
+\newcommand{\cardtext}[1]{
+    \begin{scope}[even odd rule]
+        \clip[cardcorners] \shapeCardInside;
+        \fill[white, elementcorners,path fading=textbox fade] \shapeTextArea;
+        \node[text width=\cardtextwidth cm, align=left, below] at (0.5*\cardwidth,0.5*\cardheight-0.5*\midbannerheight-\textboxpadding) {\scriptsize #1};
+    \end{scope}
+}
+
+%   token
+\newcommand{\cardtoken}[1]{
+    \fill[lightgray] \shapeToken;
+    \draw[cardtokenbg] \shapeToken;
+    \draw[cardtoken=#1] \shapeToken;
+    \draw[darkgray, line width=1] \shapeToken;
+}

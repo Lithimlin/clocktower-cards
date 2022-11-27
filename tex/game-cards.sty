@@ -1,0 +1,59 @@
+\ProvidesPackage{game-cards}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%         Dependencies          %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%   Adjust page borders
+\RequirePackage[margin=6mm,top=5mm]{geometry}
+
+\RequirePackage{graphicx}
+\RequirePackage{xcolor}
+
+\RequirePackage{tikz}
+\usetikzlibrary{patterns}
+\usetikzlibrary{shadows}
+\usetikzlibrary{fadings}
+
+%   Fonts
+%\RequirePackage{anttor}
+\RequirePackage{rotunda}
+\RequirePackage{almendra}
+
+
+%   optischer Randausgleich
+\RequirePackage{microtype}
+
+%   load symbols; usage \ding{<nummer>}
+% \usepackage{pifont}
+%   more symbols
+% \usepackage{fourier-orns}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%           Internal            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{card/colors}
+\usepackage{card/style}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%            Style              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\card}[7]{
+    % arguments:
+    %   title
+    %   image
+    %   midbanner
+    %   cardtext
+    %   botbanner left
+    %   botbanner center
+    %   token
+    \begin{tikzpicture}
+        \cardborder
+        \cardimage{#2}
+        \cardtitle{#1}
+        \cardmidbanner{#3}
+        \cardbotbanner{#5}{#6}
+        \cardtext{#4}
+        \cardtoken{#7}
+    \end{tikzpicture}
+}
